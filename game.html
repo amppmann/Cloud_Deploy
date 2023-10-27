@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+    
+        #name-container {
+            display: block;
+            margin-top: 30px;
+        }
+    
+        label {
+            font-size: 20px;
+        }
+    
+        #name-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #0095DD;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+    
+        #start-button {
+            background: #0095DD;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background-color: #f2f2f2; /* Set your desired background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            background-image: linear-gradient(to bottom, #f2f2f2, #c0c0c0); /* Add a gradient background */
+        }
+
+    
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    
+        .answers {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .answer {
+            margin: 10px;
+            padding: 10px 20px;
+            background: #0095DD;
+            color: #fff;
+            border: 2px solid #0095DD;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+            font-size: 18px;
+        }
+    
+        .answer:hover {
+            background: #fff;
+            color: #0095DD;
+        }
+    
+        #score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1> Quiz Game</h1>
+
+        <!-- Name Entry Page -->
+        <div id="name-container">
+            <label for="player-name">Enter your name:</label>
+            <input type="text" id="name-input" placeholder="Your Name">
+            <br><br>
+            <button id="start-button">Start Quiz</button>
+        </div>
+
+        <!-- Quiz Page -->
+        <div class="question" id="question"></div>
+        <div class="answers" id="answers"></div>
+        <div id="score" style="display: none;"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                answers: ["Paris", "London", "Berlin", "Madrid"],
+                correct: 0
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                answers: ["Mars", "Venus", "Jupiter", "Saturn"],
+                correct: 0
+            },
+            {
+                question: "What is the largest mammal in the world?",
+                answers: ["Elephant", "Giraffe", "Blue Whale", "Kangaroo"],
+                correct: 2
+            },
+            {
+                question: "Which country is famous for the Great Wall of China?",
+                answers: ["Japan", "India", "China", "Korea"],
+                correct: 2
+            },
+            {
+                question: "What is the largest organ in the human body?",
+                answers: ["Heart", "Liver", "Skin", "Lungs"],
+                correct: 2
+            },
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let playerName = "";
+        
+
+        const questionElement = document.getElementById('question');
+        const answersElement = document.getElementById('answers');
+        const scoreElement = document.getElementById('score');
+        const nameContainer = document.getElementById('name-container');
+        const nameInput = document.getElementById('name-input');
+        const startButton = document.getElementById('start-button');
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            questionElement.textContent = question.question;
+            answersElement.innerHTML = '';
+
+            for (let i = 0; i < question.answers.length; i++) {
+                const answer = document.createElement('div');
+                answer.classList.add('answer');
+                answer.textContent = question.answers[i];
+                answer.addEventListener('click', () => checkAnswer(i));
+                answersElement.appendChild(answer);
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            const question = questions[currentQuestion];
+            if (selectedIndex === question.correct) {
+                score++;
+            }
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            questionElement.textContent = `Quiz Complete, ${playerName}!`;
+            answersElement.innerHTML = '';
+            scoreElement.style.display = 'block';
+            scoreElement.textContent = `Your Score: ${score} out of ${questions.length}`;
+        }
+
+        startButton.addEventListener('click', () => {
+            playerName = nameInput.value;
+            nameContainer.style.display = 'none';
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
